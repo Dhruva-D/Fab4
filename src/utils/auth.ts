@@ -113,7 +113,7 @@ export const authUtils = {
 
   // API call with auth
   apiCall: async (url: string, options: RequestInit = {}) => {
-    const baseURL = 'https://uvce-backend.onrender.com/api';
+    const baseURL = 'https://fab4-backend.onrender.com/api';
     const response = await fetch(`${baseURL}${url}`, {
       ...options,
       headers: {

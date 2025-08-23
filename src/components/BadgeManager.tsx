@@ -36,7 +36,7 @@ const BadgeManager: React.FC = () => {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch('https://uvce-backend.onrender.com/api/badges/check', {
+      const response = await fetch('https://fab4-backend.onrender.com/api/badges/check', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const BadgeManager: React.FC = () => {
 
   const fetchBadgeStats = async () => {
     try {
-      const response = await fetch('https://uvce-backend.onrender.com/api/badges/stats');
+      const response = await fetch('https://fab4-backend.onrender.com/api/badges/stats');
       const data = await response.json();
       
       if (data.success) {

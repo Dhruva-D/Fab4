@@ -48,7 +48,7 @@ const ArtistDashboard: React.FC = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await fetch('https://uvce-backend.onrender.com/api/artworks/my/artworks', {
+      const response = await fetch('https://fab4-backend.onrender.com/api/artworks/my/artworks', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -95,7 +95,7 @@ const ArtistDashboard: React.FC = () => {
         return;
       }
 
-      const response = await fetch('https://uvce-backend.onrender.com/api/artworks', {
+      const response = await fetch('https://fab4-backend.onrender.com/api/artworks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
