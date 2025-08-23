@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface LoginPageProps {}
 
@@ -8,6 +8,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,8 +35,9 @@ const LoginPage: React.FC<LoginPageProps> = () => {
         localStorage.setItem('user', JSON.stringify(data.data.user));
         
         // Redirect based on user type
-        window.location.href = data.data.user.userType === 'artist' ? '/artist' : 
-                               data.data.user.userType === 'business' ? '/brand' : '/';
+        const redirectPath = data.data.user.userType === 'artist' ? '/artist' : 
+                             data.data.user.userType === 'business' ? '/brand' : '/';
+        navigate(redirectPath);
       } else {
         setError(data.message || 'Login failed');
       }

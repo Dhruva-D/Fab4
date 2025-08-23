@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { QRCodeCanvas } from 'qrcode.react';
 
 interface Artwork {
@@ -40,6 +41,17 @@ const productTypes = [
 ];
 
 const BrandDashboard: React.FC = () => {
+  const navigate = useNavigate();
+  
+  // Authentication check
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+  }, [navigate]);
+
   // Removed availableArtworks API call for quick fix
   const [purchasedArt, setPurchasedArt] = useState<PurchasedArt[]>([]);
   const [profile, setProfile] = useState<BrandProfile>({

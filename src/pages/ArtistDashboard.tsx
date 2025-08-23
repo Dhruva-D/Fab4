@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Artwork {
   _id?: string;
@@ -22,6 +23,7 @@ const states = [
 ];
 
 const ArtistDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [form, setForm] = useState({
     title: '', description: '', image: '', state: '', price: ''
@@ -32,8 +34,13 @@ const ArtistDashboard: React.FC = () => {
 
   // Load artworks on component mount
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
     loadArtworks();
-  }, []);
+  }, [navigate]);
 
   const loadArtworks = async () => {
     try {
