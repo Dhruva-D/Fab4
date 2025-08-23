@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { useNavigate } from 'react-router-dom';
+import BadgeDisplay from '../components/BadgeDisplay';
 
 type Artwork = {
   _id: string;
@@ -13,6 +14,16 @@ type Artwork = {
   views?: number;
   likes?: number;
   createdAt?: string;
+  artist?: {
+    _id: string;
+    profile: {
+      name: string;
+    };
+    badges?: {
+      verified: boolean;
+      awardedAt?: string;
+    };
+  };
 };
 
 const productMockups = [
@@ -232,7 +243,12 @@ const Marketplace: React.FC = () => {
               <div className="font-bold text-lg mb-1">{art.title}</div>
               <div className="text-orange-600 font-semibold mb-1">₹{art.price}</div>
               <div className="text-xs text-stone-500 mb-1">{art.state}</div>
-              <div className="text-xs text-stone-700 mb-2">{art.artistName}</div>
+              <div className="flex items-center justify-center gap-1 mb-2">
+                <span className="text-xs text-stone-700">{art.artistName}</span>
+                {art.artist?.badges?.verified && (
+                  <BadgeDisplay badges={art.artist.badges} size="small" showLabel={false} />
+                )}
+              </div>
               {art.views !== undefined && (
                 <div className="text-xs text-blue-600 mb-2">Views: {art.views}</div>
               )}

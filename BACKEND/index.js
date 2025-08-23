@@ -7,6 +7,7 @@ const connectDB = require("./config/database");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const artworkRoutes = require("./routes/artworks");
+const badgeRoutes = require("./routes/badges");
 
 // Load environment variables
 dotenv.config();
@@ -45,6 +46,7 @@ app.get("/", (req, res) => {
       auth: "/api/auth",
       users: "/api/users",
       artworks: "/api/artworks",
+      badges: "/api/badges",
     },
   });
 });
@@ -53,6 +55,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/artworks", artworkRoutes);
+app.use("/api/badges", badgeRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

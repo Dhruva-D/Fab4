@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BadgeManager from '../components/BadgeManager';
 
 interface Artwork {
   _id?: string;
@@ -106,9 +107,20 @@ const ArtistDashboard: React.FC = () => {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        setSuccess('Artwork uploaded successfully!');
+        let successMessage = 'Artwork uploaded successfully!';
+        if (data.badges && data.badges.newBadge) {
+          successMessage += ` 🎉 ${data.badges.message}`;
+        }
+        setSuccess(successMessage);
         setForm({ title: '', description: '', image: '', state: '', price: '' });
         loadArtworks(); // Reload artworks
+        
+        // Refresh badge information if badge was awarded
+        if (data.badges && data.badges.newBadge) {
+          setTimeout(() => {
+            window.location.reload(); // Simple way to refresh badge status
+          }, 2000);
+        }
       } else {
         setError(data.message || 'Failed to upload artwork');
       }
@@ -123,6 +135,11 @@ const ArtistDashboard: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto py-10 px-4">
       <h2 className="text-3xl font-bold header-indian mb-6">Artist Dashboard</h2>
+      
+      {/* Badge Manager */}
+      <div className="mb-8">
+        <BadgeManager />
+      </div>
       
       {/* Upload Form */}
       <form className="bg-white rounded-xl shadow-lg p-6 mb-8 section-indian" onSubmit={handleSubmit}>

@@ -40,8 +40,24 @@ export const authUtils = {
   getCurrentUser: (): User | null => {
     try {
       const userStr = localStorage.getItem('user');
-      return userStr ? JSON.parse(userStr) : null;
-    } catch {
+      if (!userStr) return null;
+      
+      const user = JSON.parse(userStr);
+      
+      // Validate user object structure
+      if (!user || typeof user !== 'object') return null;
+      if (!user._id || !user.email || !user.userType) return null;
+      
+      // Ensure profile exists with at least basic structure
+      if (!user.profile) {
+        user.profile = { name: user.email.split('@')[0] };
+      }
+      
+      return user;
+    } catch (error) {
+      console.error('Error parsing user data from localStorage:', error);
+      // Clear corrupted data
+      localStorage.removeItem('user');
       return null;
     }
   },
@@ -54,6 +70,23 @@ export const authUtils = {
   // Check if user is logged in
   isAuthenticated: (): boolean => {
     return !!(authUtils.getToken() && authUtils.getCurrentUser());
+  },
+
+  // Clean up corrupted auth data
+  cleanup: (): void => {
+    try {
+      const user = authUtils.getCurrentUser();
+      const token = authUtils.getToken();
+      
+      // If we have a token but no valid user, or vice versa, clean up
+      if ((token && !user) || (!token && user)) {
+        console.warn('Inconsistent auth state detected, cleaning up...');
+        authUtils.logout();
+      }
+    } catch (error) {
+      console.error('Error during auth cleanup:', error);
+      authUtils.logout();
+    }
   },
 
   // Logout user

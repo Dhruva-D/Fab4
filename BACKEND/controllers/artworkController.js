@@ -1,5 +1,6 @@
 const Artwork = require("../models/Artwork");
 const User = require("../models/User");
+const { checkAndUpdateBadges } = require("../utils/badgeManager");
 
 // Get all artworks (public route)
 const getAllArtworks = async (req, res) => {
@@ -15,7 +16,7 @@ const getAllArtworks = async (req, res) => {
     const skip = (page - 1) * limit;
 
     const artworks = await Artwork.find(filter)
-      .populate("artist", "profile.name profile.artistInfo")
+      .populate("artist", "profile.name profile.artistInfo badges")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
@@ -50,7 +51,7 @@ const getArtworkById = async (req, res) => {
 
     const artwork = await Artwork.findById(id).populate(
       "artist",
-      "profile.name profile.artistInfo profile.phone"
+      "profile.name profile.artistInfo profile.phone badges"
     );
 
     if (!artwork) {
@@ -103,10 +104,17 @@ const createArtwork = async (req, res) => {
 
     await artwork.save();
 
+    // Check and update badges after artwork creation
+    const badgeResult = await checkAndUpdateBadges(userId);
+    
     res.status(201).json({
       success: true,
       message: "Artwork created successfully",
       data: artwork,
+      badges: badgeResult.badgeAwarded ? {
+        newBadge: "verified",
+        message: "Congratulations! You've earned the 'Verified Artist' badge for uploading 3+ artworks!"
+      } : null,
     });
   } catch (error) {
     console.error("Create artwork error:", error);

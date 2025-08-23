@@ -60,6 +60,16 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    badges: {
+      verified: {
+        type: Boolean,
+        default: false,
+      },
+      awardedAt: {
+        type: Date,
+        default: null,
+      },
+    },
     isActive: {
       type: Boolean,
       default: true,

@@ -9,6 +9,9 @@ const Navbar = () => {
 
   // Check authentication status on component mount
   useEffect(() => {
+    // Clean up any corrupted auth data first
+    authUtils.cleanup();
+    
     const currentUser = authUtils.getCurrentUser();
     setUser(currentUser);
   }, []);
@@ -58,7 +61,7 @@ const Navbar = () => {
                 <div className="flex items-center space-x-2 px-3 py-1 bg-orange-50 rounded-full">
                   <User className="h-4 w-4 text-orange-600" />
                   <span className="text-sm font-medium text-stone-800">
-                    {user.profile.name}
+                    {user.profile?.name || user.email || 'User'}
                   </span>
                   <span className="text-xs px-2 py-1 bg-orange-200 text-orange-800 rounded-full capitalize">
                     {user.userType}
@@ -125,7 +128,7 @@ const Navbar = () => {
                   <div className="flex items-center space-x-2">
                     <User className="h-4 w-4 text-orange-600" />
                     <span className="text-sm font-medium text-stone-800">
-                      {user.profile.name}
+                      {user.profile?.name || user.email || 'User'}
                     </span>
                     <span className="text-xs px-2 py-1 bg-orange-200 text-orange-800 rounded-full capitalize">
                       {user.userType}
