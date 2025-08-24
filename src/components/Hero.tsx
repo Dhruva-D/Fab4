@@ -33,13 +33,23 @@ const Hero = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <button className="btn-indian px-8 py-4 font-semibold text-lg flex items-center gap-2">
+          <button 
+            onClick={() => window.location.href = '/marketplace'}
+            className="btn-indian px-8 py-4 font-semibold text-lg flex items-center gap-2"
+          >
             Explore Collection
             <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
           </button>
           
-          <button className="btn-indian px-8 py-4 font-semibold text-lg" style={{background:'var(--muted-bg)',color:'var(--deep-maroon)',border:'1px solid var(--gold)'}}>
-            Meet Artists
+          <button 
+            onClick={() => {
+              const mapElement = document.querySelector('#interactive-map');
+              mapElement?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="btn-indian px-8 py-4 font-semibold text-lg" 
+            style={{background:'var(--muted-bg)',color:'var(--deep-maroon)',border:'1px solid var(--gold)'}}
+          >
+            Explore India Map
           </button>
         </div>
 

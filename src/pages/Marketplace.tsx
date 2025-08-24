@@ -72,6 +72,17 @@ const Marketplace: React.FC = () => {
     'Ladakh'
   ];
 
+  // Initialize state from URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const stateParam = urlParams.get('state');
+    if (stateParam && states.includes(stateParam)) {
+      setSelectedState(stateParam);
+    } else {
+      setSelectedState('All States');
+    }
+  }, []);
+
   useEffect(() => {
     loadArtworks();
   }, [selectedState]);
@@ -245,8 +256,8 @@ const Marketplace: React.FC = () => {
               <div className="text-xs text-stone-500 mb-1">{art.state}</div>
               <div className="flex items-center justify-center gap-1 mb-2">
                 <span className="text-xs text-stone-700">{art.artistName}</span>
-                {art.artist?.badges?.verified && (
-                  <BadgeDisplay badges={art.artist.badges} size="small" showLabel={false} />
+                {art.artist?.badges?.verified && art.artist.badges.awardedAt && (
+                  <BadgeDisplay badges={art.artist.badges as {verified: boolean; awardedAt: string}} size="small" showLabel={false} />
                 )}
               </div>
               {art.views !== undefined && (
